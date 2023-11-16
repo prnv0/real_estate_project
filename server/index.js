@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
-const pool = require('./db');
+const userRouter = require('./routes/user_routes');
 
 
 dotenv.config();
@@ -12,3 +12,5 @@ dotenv.config();
 app.listen(process.env.PORT, () => {
     console.log('server started');
 });
+
+app.use("/api/user/", userRouter);
