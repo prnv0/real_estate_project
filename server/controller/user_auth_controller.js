@@ -8,7 +8,11 @@ const signup = (req, res) => {
     console.log("Password:", password);
     console.log("Email:", email);
 
+    //this should not be here
     pool.query("ALTER TABLE users ADD PRIMARY KEY (username)");
+    //this should not be here
+
+
     pool.query("insert into users (username, password, email) values ($1, $2, $3)", [username, password, email], (err, result) => {
         if (err) {
             console.log(err);
