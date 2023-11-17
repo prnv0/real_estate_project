@@ -2,11 +2,13 @@ const pool = require('../db');
 const bcrypt = require('bcrypt');
 
 
-const signup = (req, res) => {
+const signup = (req, res, next) => {
     console.log(req.body);
     const { username, password, email } = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
     console.log("Username:", username);
-    console.log("Password:", password);
+    console.log("Password:", hashedPassword);
     console.log("Email:", email);
 
     //this should not be here
@@ -14,17 +16,12 @@ const signup = (req, res) => {
     //this should not be here
 
     try {
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        pool.query("insert into users (username, password, email) values ($1, $2, $3)", [username, hashedPassword, email], (err, result) => {
-            if (err) {
-                // console.log(err);
-                res.status(400).send("Error");
-            } else {
-                res.status(200).send("Success");
-            }
+        const insertQuery = "INSERT INTO users (username, password, email) VALUES ($1, $2, $3)";
+        pool.query(insertQuery, [username, hashedPassword, email], (err, result) => {
+            next(err);
         });
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 }
 
