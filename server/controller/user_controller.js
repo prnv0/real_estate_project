@@ -6,7 +6,7 @@ const update_user = async (req, res, next) => {
     const id = req.params.id;
 
     if (id != req.user.uid) {
-        return next(error_handler(401, 'Not Authorized'));
+        return next(error_handler(401, 'You can only update your own profile'));
     }
 
     const { username, password, email } = req.body;
@@ -68,7 +68,7 @@ const delete_user = async (req, res, next) => {
     const id = req.params.id;
 
     if (id != req.user.uid) {
-        return next(error_handler(401, 'Not Authorized'));
+        return next(error_handler(401, 'You can only delete your own profile'));
     }
 
     const client = await pool.connect();
@@ -81,6 +81,7 @@ const delete_user = async (req, res, next) => {
                 next(err);
             } else {
                 client.release();
+                res.clearCookie("access_token");
                 res.status(200).send("User deleted successfully");
             }
         });
