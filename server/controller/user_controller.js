@@ -63,4 +63,34 @@ const update_user = async (req, res, next) => {
     }
 }
 
-module.exports = update_user;
+
+const delete_user = async (req, res, next) => {
+    const id = req.params.id;
+
+    if (id != req.user.uid) {
+        return next(error_handler(401, 'Not Authorized'));
+    }
+
+    const client = await pool.connect();
+
+    try {
+        const deleteQuery = `DELETE FROM users WHERE uid = ${id}`;
+        client.query(deleteQuery, (err, result) => {
+            if (err) {
+                client.release();
+                next(err);
+            } else {
+                client.release();
+                res.status(200).send("User deleted successfully");
+            }
+        });
+    } catch (error) {
+        client.release();
+        next(error);
+    }
+};
+
+module.exports = {
+    update_user,
+    delete_user,
+};
