@@ -21,7 +21,10 @@ const signup = async (req, res, next) => {
         client.query(insertQuery, [username, hashedPassword, email], (err, result) => {
             if (err) {
 
-                return next(err);
+                next(err);
+            } else {
+                client.release();
+                res.status(200).send("User created successfully");
             }
         });
     } catch (error) {
