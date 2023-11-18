@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-router.get('/test', (req, res) => {
-    pool.query('SELECT * FROM users', (err, result) => {
+router.get('/test', async (req, res) => {
+    const client = await pool.connect();
+    client.query('SELECT * FROM users', (err, result) => {
         if (err) {
             console.log(err);
         } else {
