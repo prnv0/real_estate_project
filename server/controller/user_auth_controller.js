@@ -1,6 +1,6 @@
 const pool = require('../db');
 const bcrypt = require('bcrypt');
-const { errorHandler } = require('../utils/error_handler');
+const errorHandler = require('../utils/error_handler');
 const jwt = require('jsonwebtoken');
 
 const signup = async (req, res, next) => {
@@ -21,7 +21,7 @@ const signup = async (req, res, next) => {
         const insertQuery = "INSERT INTO users (username, password, email) VALUES ($1, $2, $3)";
         client.query(insertQuery, [username, hashedPassword, email], (err, result) => {
             if (err) {
-
+                client.release();
                 next(err);
             } else {
                 client.release();
@@ -43,7 +43,7 @@ const signin = async (req, res, next) => {
                 next(errorHandler(404, "Internal Server Error"));
             } else {
                 if (result.rows.length === 0) {
-                    print(result.rows);
+
                     next(errorHandler(404, "User not found"));
                 } else {
                     console.log(result.rows);

@@ -4,12 +4,13 @@ const dotenv = require('dotenv');
 const userRouter = require('./routes/user_routes.js');
 const authRouter = require('./routes/user_auth_routes.js');
 const bodyParser = require('body-parser');
+const cookies = require('cookie-parser');
 
 dotenv.config();
 
 
 app.use(bodyParser.json());
-
+app.use(cookies());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
