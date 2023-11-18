@@ -1,6 +1,7 @@
 const pool = require('../db');
 const bcrypt = require('bcrypt');
-
+const { errorHandler } = require('../utils/error_handler');
+const jwt = require('jsonwebtoken');
 
 const signup = async (req, res, next) => {
     console.log(req.body);
@@ -33,16 +34,38 @@ const signup = async (req, res, next) => {
 }
 
 
-// const signin = async (req, res, next) => {
-//     const { email, password } = req.body;
-//     const selectQuery = "SELECT * FROM users WHERE email = $1";
-//     try {
-//         pool.query(selectQuery, [email], (err, result) => {
-//             next(err);
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
+const signin = async (req, res, next) => {
+    const { email, password } = req.body;
+    const selectQuery = "SELECT * FROM users WHERE email = $1";
+    try {
+        pool.query(selectQuery, [email], (err, result) => {
+            if (err) {
+                next(errorHandler(404, "Internal Server Error"));
+            } else {
+                if (result.rows.length === 0) {
+                    print(result.rows);
+                    next(errorHandler(404, "User not found"));
+                } else {
+                    console.log(result.rows);
+                    const hashedPassword = result.rows[0].password;
+                    const isMatch = bcrypt.compareSync(password, hashedPassword);
+                    if (isMatch) {
+                        const { password: userPassword, ...rest } = result.rows[0];
+                        const token = jwt.sign({ uid: result.rows[0].uid }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                        res.cookie("access_token", token, { httpOnly: true }).status(200).json(rest);
+                        // res.status(200).send("User logged in successfully");
+                    } else {
+                        next(errorHandler(401, "Invalid credentials"));
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
-module.exports = signup;
+module.exports = {
+    signup,
+    signin
+};
