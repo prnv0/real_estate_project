@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const errorHandler = require('../utils/error_handler');
 const jwt = require('jsonwebtoken');
 
-const signup = async (req, res, next) => {
+const sign_up = async (req, res, next) => {
     console.log(req.body);
     const client = await pool.connect();
     const { username, password, email } = req.body;
@@ -34,7 +34,7 @@ const signup = async (req, res, next) => {
 }
 
 
-const signin = async (req, res, next) => {
+const sign_in = async (req, res, next) => {
     const { email, password } = req.body;
     const selectQuery = "SELECT * FROM users WHERE email = $1";
     try {
@@ -65,7 +65,17 @@ const signin = async (req, res, next) => {
     }
 };
 
+
+const sign_out = async (req, res, next) => {
+    try {
+        res.clearCookie("access_token").status(200).send("User logged out successfully");
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    signup,
-    signin
+    sign_up,
+    sign_in,
+    sign_out,
 };
