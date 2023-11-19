@@ -91,7 +91,25 @@ const delete_user = async (req, res, next) => {
     }
 };
 
+
+const get_user_listings = async (req, res, next) => {
+    if (req.user.uid == req.params.id) {
+        try {
+            const userId = req.params.id;
+            const getUserListingsQuery = 'SELECT * FROM listing WHERE user_uid = $1';
+            const { rows } = await pool.query(getUserListingsQuery, [userId]);
+            res.status(200).json(rows);
+        } catch (error) {
+            next(error);
+        }
+    } else {
+        next(error_handler(401, 'You can only view your own listings'));
+    }
+};
+
+
 module.exports = {
     update_user,
     delete_user,
+    get_user_listings
 };
