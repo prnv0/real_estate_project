@@ -21,5 +21,4 @@ CREATE TABLE listing (
     bathrooms INT DEFAULT 0,
     area_sqft INT DEFAULT 0,
     year_built INT DEFAULT 0
-   
 );

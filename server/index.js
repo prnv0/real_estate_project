@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+const listingRouter = require('./routes/listing_routes.js');
 const userRouter = require('./routes/user_routes.js');
 const authRouter = require('./routes/user_auth_routes.js');
 const bodyParser = require('body-parser');
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 app.use(cookies());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/listing", listingRouter);
 
 app.use((err, req, res, next) => {
 
