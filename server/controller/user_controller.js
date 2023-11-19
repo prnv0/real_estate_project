@@ -107,9 +107,37 @@ const get_user_listings = async (req, res, next) => {
     }
 };
 
+const delete_user_listing = async (req, res, next) => {
+    try {
+
+        const userId = req.user.uid;
+        const listingId = req.params.id;
+        const deleteListingQuery = 'DELETE FROM listing WHERE user_uid = $1 AND property_id = $2';
+        var created_user;
+        try {
+            created_user = await pool.query("select user_uid from listing where property_id = $1", [listingId]);
+        } catch (error) {
+
+            next(error);
+
+        }
+        if (!created_user.rows[0]) {
+            return next(error_handler(404, 'Listing not found for this user'));
+        }
+        if (created_user.rows[0].user_uid == userId) {
+            const { rows } = await pool.query(deleteListingQuery, [userId, listingId]);
+            res.status(200).send("Listing deleted successfully");
+        } else {
+            return next(error_handler(401, 'You can only delete your own listings'));
+        }
+    } catch (error) {
+        next(error);
+    }
+};
 
 module.exports = {
     update_user,
     delete_user,
-    get_user_listings
+    get_user_listings,
+    delete_user_listing
 };
