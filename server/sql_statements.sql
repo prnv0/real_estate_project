@@ -22,3 +22,6 @@ CREATE TABLE listing (
     area_sqft INT DEFAULT 0,
     year_built INT DEFAULT 0
 );
+
+
+SELECT * FROM public.listing ORDER BY property_id ASC;
