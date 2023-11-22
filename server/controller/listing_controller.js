@@ -124,7 +124,7 @@ const search_listings = async (req, res, next) => {
         }
 
 
-        // Repeat for other parameters...
+
 
         const { rows } = await pool.query(queryText, queryParams);
         res.status(200).json(rows);

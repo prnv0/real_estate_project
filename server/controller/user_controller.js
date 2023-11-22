@@ -135,9 +135,26 @@ const delete_user_listing = async (req, res, next) => {
     }
 };
 
+const user_details = async (req, res, next) => {
+    try {
+        const client = await pool.connect();
+        const userId = req.params.id;
+        const getUserQuery = 'SELECT * FROM users WHERE uid = $1';
+        const { rows } = await client.query(getUserQuery, [userId]);
+        client.release();
+        if (!rows[0]) {
+            return next(error_handler(404, 'User not found'));
+        }
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     update_user,
     delete_user,
     get_user_listings,
-    delete_user_listing
+    delete_user_listing,
+    user_details
 };
