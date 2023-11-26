@@ -6,10 +6,11 @@ const userRouter = require('./routes/user_routes.js');
 const authRouter = require('./routes/user_auth_routes.js');
 const bodyParser = require('body-parser');
 const cookies = require('cookie-parser');
+const cors = require('cors');
 
 dotenv.config();
 
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookies());
 app.use("/api/user", userRouter);

@@ -38,6 +38,9 @@ const sign_in = async (req, res, next) => {
     const { email, password } = req.body;
     const selectQuery = "SELECT * FROM users WHERE email = $1";
     try {
+        console.log("Email:", email);
+        console.log("Password:", password);
+        console.log("Select Query:", selectQuery);
         pool.query(selectQuery, [email], (err, result) => {
             if (err) {
                 next(errorHandler(404, "Internal Server Error"));
