@@ -18,9 +18,10 @@ class Login extends React.Component {
     }
 
     handleSubmit = (event) => {
-        const navigate = useNavigate();
 
         console.log('handleSubmit called');
+        const navigate = useNavigate();
+
 
         event.preventDefault();
 
