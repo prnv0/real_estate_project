@@ -8,6 +8,7 @@ import Pricing from "../pricing/Pricing"
 import Blog from "../blog/Blog"
 import Services from "../services/Services"
 import Contact from "../contact/Contact"
+import Login from "../login/login"
 
 const Pages = () => {
   return (
@@ -15,12 +16,13 @@ const Pages = () => {
       <Router>
         <Header />
         <Routes>
+          <Route exact path='/login' element={<Login />} />
           <Route path='/' element={<Home />} />
-          <Route path="/about" element={<About/>}/>
-          <Route exact path='/services' element={<Services/>} />
-          <Route exact path='/blog' element={<Blog/>} />
-          <Route exact path='/pricing' element={<Pricing/>} />
-          <Route exact path='/contact' element={<Contact/>} />
+          <Route path="/about" element={<About />} />
+          <Route exact path='/services' element={<Services />} />
+          <Route exact path='/blog' element={<Blog />} />
+          <Route exact path='/pricing' element={<Pricing />} />
+          <Route exact path='/contact' element={<Contact />} />
         </Routes>
         <Footer />
       </Router>
