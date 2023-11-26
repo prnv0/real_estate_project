@@ -72,4 +72,65 @@ const get_all_listing = async (req, res, next) => {
     }
 }
 
-module.exports = { create_listing, update_user_listing, get_all_listing };
+const search_listings = async (req, res, next) => {
+    try {
+        const { location, type, bathrooms, bedrooms, year_built, price_per_sqft, area_sqft } = req.query;
+        let queryText = 'SELECT * FROM listing WHERE';
+        let queryParams = [];
+        let addAnd = false;
+
+        if (location) {
+            queryParams.push(location);
+            queryText += ` location = $${queryParams.length}`;
+            addAnd = true;
+        }
+
+        if (type) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(type);
+            queryText += ` type = $${queryParams.length}`;
+            addAnd = true;
+        }
+
+        if (bathrooms) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(bathrooms);
+            queryText += ` bathrooms = $${queryParams.length}`;
+            addAnd = true;
+        }
+        if (bedrooms) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(bedrooms);
+            queryText += ` bedrooms = $${queryParams.length}`;
+            addAnd = true;
+        }
+        if (year_built) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(year_built);
+            queryText += ` year_built = $${queryParams.length}`;
+            addAnd = true;
+        }
+        if (area_sqft) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(area_sqft);
+            queryText += ` area_sqft = $${queryParams.length}`;
+            addAnd = true;
+        }
+        if (price_per_sqft) {
+            if (addAnd) queryText += ' AND';
+            queryParams.push(price_per_sqft);
+            queryText += ` price_per_sqft = $${queryParams.length}`;
+            addAnd = true;
+        }
+
+
+
+
+        const { rows } = await pool.query(queryText, queryParams);
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { create_listing, update_user_listing, get_all_listing, search_listings };
