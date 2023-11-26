@@ -1,33 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: ''
-        };
-    }
+function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    handleInputChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
 
-    handleSubmit = (event) => {
+        if (name === 'email') {
+            setEmail(value);
+        } else if (name === 'password') {
+            setPassword(value);
+        }
+    };
 
-        console.log('handleSubmit called');
-        const navigate = useNavigate();
-
-
+    const handleSubmit = (event) => {
         event.preventDefault();
-
-        const { email, password } = this.state;
-        console.log('email:', email);
-        console.log('password:', password);
+        console.log('handleSubmit called');
 
         fetch('http://localhost:3000/api/auth/signin', {
             method: 'POST',
@@ -35,12 +27,14 @@ class Login extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
+            credentials: 'include',
         })
-            .then(response => response.json()) // Add this line
+            .then(response => response.json())
             .then(data => {
                 if (data.uid && data.username && data.email) {
-                    // Save user data here
-                    navigate('/'); // Redirect to main page
+                    console.log('Login successful');
+                    console.log(data);
+                    navigate('/', { state: { uid: data.uid } }); // Redirect to main page
                 } else {
                     // Handle login failure here
                 }
@@ -48,33 +42,33 @@ class Login extends React.Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-    }
+    };
 
-    render() {
-        return (
-            <div className="login-container">
-                <h2>Login</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="Username"
-                        value={this.state.email}
-                        onChange={this.handleInputChange}
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={this.state.password}
-                        onChange={this.handleInputChange}
-                    />
 
-                    <button type="submit">Login</button>
-                </form>
-            </div>
-        );
-    }
+    return (
+        <div className="login-container">
+            <h2>Login</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="Username"
+                    value={email}
+                    onChange={handleInputChange}
+                />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={handleInputChange}
+                />
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    );
+
 }
 
 export default Login;

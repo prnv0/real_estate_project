@@ -6,7 +6,7 @@ import Slider from "@mui/material/Slider";
 import "react-widgets/styles.css";
 import "./hero.css";
 
-const Hero = () => {
+const Hero = ({ uid }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [listings, setListings] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -17,13 +17,13 @@ const Hero = () => {
 
   const searchListings = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/listing/listings/search?location=Suburb%20City&type=villa"
-      );
+      const userId = uid; // Replace with actual user ID
+      const response = await fetch(`http://localhost:3000/api/user/listings/${userId}`, { credentials: 'include' });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+      console.log(data);
       setSearchResults(data); // Set the retrieved search results in state
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);

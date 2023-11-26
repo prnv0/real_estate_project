@@ -18,7 +18,7 @@ const Pages = () => {
         <Header />
         <Routes>
 
-          <Route exact path='/login' element={<Login />} />
+          <Route path='/login' element={<Login />} />
           <Route path='/' element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route exact path='/services' element={<Services />} />
@@ -28,6 +28,7 @@ const Pages = () => {
         </Routes>
         <Footer />
       </Router>
+
     </>
   );
 };

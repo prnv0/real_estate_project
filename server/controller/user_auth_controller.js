@@ -35,6 +35,7 @@ const sign_up = async (req, res, next) => {
 
 
 const sign_in = async (req, res, next) => {
+    console.log(res.get('Set-Cookie'));
     const { email, password } = req.body;
     const selectQuery = "SELECT * FROM users WHERE email = $1";
     try {
@@ -55,7 +56,11 @@ const sign_in = async (req, res, next) => {
                     if (isMatch) {
                         const { password: userPassword, ...rest } = result.rows[0];
                         const token = jwt.sign({ uid: result.rows[0].uid }, process.env.JWT_SECRET, { expiresIn: "1h" });
-                        res.cookie("access_token", token, { httpOnly: true }).status(200).json(rest);
+                        res.cookie("access_token", token, {
+                            sameSite: "none",
+                            secure: true,
+                            httpOnly: true
+                        }).status(200).json(rest);
                         // res.status(200).send("User logged in successfully");
                     } else {
                         next(errorHandler(401, "Invalid credentials"));

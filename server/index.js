@@ -10,7 +10,10 @@ const cors = require('cors');
 
 dotenv.config();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3001', // Allow this origin
+    credentials: true, // Allow cookies
+}));
 app.use(bodyParser.json());
 app.use(cookies());
 app.use("/api/user", userRouter);
