@@ -51,7 +51,7 @@ export const featured = [
     total: "80 Property",
   },
 ]
-export const list = [
+export const list1 = [
   {
     id: 1,
     cover: "../images/list/p-1.png",

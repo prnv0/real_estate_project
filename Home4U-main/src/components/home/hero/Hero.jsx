@@ -5,6 +5,8 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import "react-widgets/styles.css";
 import "./hero.css";
+import RecentCard from "../recent/RecentCard.jsx";
+
 
 const Hero = ({ uid }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
@@ -24,7 +26,8 @@ const Hero = ({ uid }) => {
       }
       const data = await response.json();
       console.log(data);
-      setSearchResults(data); // Set the retrieved search results in state
+      setSearchResults(data);
+      console.log(searchResults);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -96,17 +99,24 @@ const Hero = ({ uid }) => {
         </div>
         <div>
           <h2>Search Results</h2>
-          <ul>
+          <div className='content grid5 mtop'><ul>
             {searchResults.map((result, index) => (
-              <li key={index}>
-                {/* Render result details */}
-                {/* Example: */}
-                <p>Name: {result.name}</p>
-                <p>Location: {result.location}</p>
-                {/* Add other details as needed */}
-              </li>
+              // <li key={index}>
+              //   <h3>{result.title}</h3>
+              //   <p>{result.description}</p>
+              //   <p>{result.price}</p>
+              //   <p>{result.address}</p>
+              // </li>
+              <div className='box' key={index}>
+
+                <h3>{result.name}</h3>
+                <p>{result.description}</p>
+                <p>{result.price}</p>
+                <p>{result.address}</p>
+              </div>
             ))}
-          </ul>
+          </ul></div>
+          <RecentCard list={searchResults} />
         </div>
       </section>
     </>
