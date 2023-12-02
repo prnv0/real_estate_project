@@ -73,6 +73,8 @@ const get_all_listing = async (req, res, next) => {
 
 const search_listings = async (req, res, next) => {
     try {
+        console.log(req.query);
+
         const { location, type, bathrooms, bedrooms, year_built, price_per_sqft, area_sqft } = req.query;
         let queryText = 'SELECT * FROM listing WHERE';
         let queryParams = [];
@@ -123,9 +125,10 @@ const search_listings = async (req, res, next) => {
         }
 
 
+        const client = await pool.connect();
 
-
-        const { rows } = await pool.query(queryText, queryParams);
+        console.log(queryText);
+        const { rows } = await client.query(queryText, queryParams);
         res.status(200).json(rows);
     } catch (error) {
         next(error);
