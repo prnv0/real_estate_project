@@ -25,6 +25,7 @@ const Pages = () => {
           <Route exact path='/blog' element={<Blog />} />
           <Route exact path='/pricing' element={<Pricing />} />
           <Route exact path='/contact' element={<Contact />} />
+          <Route exact path="/add-listing" element={<Login />} />
         </Routes>
         <Footer />
       </Router>

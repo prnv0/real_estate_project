@@ -12,17 +12,13 @@ export const nav = [
     path: "/services",
   },
   {
-    text: "Buy",
-    path: "/",
-  },
-  {
-    text: "Rent",
-    path: "/",
-  },
-  {
     text: "contact",
     path: "/contact",
   },
+  {
+    text: "Add Listing",
+    path: "/add-listing"
+  }
 ]
 export const featured = [
   {
