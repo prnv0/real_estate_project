@@ -7,7 +7,7 @@ import "react-widgets/styles.css";
 import "./hero.css";
 import RecentCard from "../recent/RecentCard.jsx";
 import axios from "axios";
-
+import Recent from "../recent/Recent.jsx";
 const Hero = ({ uid }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [listings, setListings] = useState([]);
@@ -79,23 +79,23 @@ const Hero = ({ uid }) => {
           />
 
           <form className="flex" onSubmit={handleSubmit}>
-            <div className="box">
-              <span>City/Street</span>
-              <input type="text" value={location} onChange={handleLocationChange} placeholder="Location" />
+            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+              <span style={{ fontWeight: 'bold' }}>City/Street</span>
+              <input type="text" value={location} onChange={handleLocationChange} placeholder="Location" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
             </div>
-            <div className="box">
-              <span>Listing Type</span>
-              <div onChange={handleListingTypeChange}>
-                <input type="radio" value="Buy" name="listingType" defaultChecked /> Buy
-                <input type="radio" value="Rent" name="listingType" /> Rent
-                <input type="radio" value="Lease" name="listingType" /> Lease
+            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+              <span style={{ fontWeight: 'bold' }}>Listing Type</span>
+              <div onChange={handleListingTypeChange} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <label><input type="radio" value="Buy" name="listingType" defaultChecked /> Buy</label>
+                <label><input type="radio" value="Rent" name="listingType" /> Rent</label>
+                <label><input type="radio" value="Lease" name="listingType" /> Lease</label>
               </div>
             </div>
-            <div className="box">
-              <span>Property Type</span>
-              <div onChange={handletypeChange}>
+            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+              <span style={{ fontWeight: 'bold' }}>Property Type</span>
+              <div onChange={handletypeChange} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {["house", "villa", "apartment", "office"].map((option, index) => (
-                  <label key={index}>
+                  <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <input type="radio" value={option} name="type" defaultChecked={option === "House"} />
                     {option}
                   </label>
@@ -153,10 +153,12 @@ const Hero = ({ uid }) => {
               </div>
             ))}
           </ul></div> */}
-          <RecentCard list={listings} />
+
         </div>
       </section>
+      <Recent searchResults={listings} heading={"Search Results"} />
     </>
+
   );
 };
 export default Hero;

@@ -35,7 +35,7 @@ const Home = () => {
     <>
       <Hero uid={uid} />
       <Featured />
-      <Recent searchResults={searchResults} />
+      <Recent searchResults={searchResults} heading={"Your Listings"} />
       <Location />
     </>
   );
