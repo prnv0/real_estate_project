@@ -26,6 +26,9 @@ const Hero = ({ uid }) => {
     settype(event.target.value);
   };
 
+  const [price, setprice] = useState();
+  const [bedrooms, setbedrooms] = useState("");
+
   const toggleMoreMenu = (e) => {
     e.preventDefault();
     setShowMoreMenu(!showMoreMenu);
@@ -35,18 +38,21 @@ const Hero = ({ uid }) => {
     event.preventDefault();
     console.log(location);
     console.log(type);
-    // const response = await axios.get('http://localhost:3000/api/listing/listings/search', {
-    //   params: {
-    //     type,
-    //     location,
+    const response = await axios.get('http://localhost:3000/api/listing/listings/search', {
+      params: {
+        type,
+        location,
+        price,
+        bedrooms,
+      },
+      withCredentials: true,
+    });
+    // const response = await fetch('http://localhost:3000/api/listing/listings/search?type=' + encodeURIComponent(type) + '&location=' + encodeURIComponent(location),
+    //   { credentials: 'include' },
+    // );
+    // const data = await response.json();
 
-    //   },
-    // });
-    const response = await fetch('http://localhost:3000/api/listing/listings/search?type=' + encodeURIComponent(type) + '&location=' + encodeURIComponent(location),
-      { credentials: 'include' },
-    );
-    const data = await response.json();
-    setListings(data);
+    setListings(response.data);
   };
 
   const searchListings = async () => {
@@ -78,57 +84,34 @@ const Hero = ({ uid }) => {
             subtitle="Find new & featured property located in your local city."
           />
 
-          <form className="flex" onSubmit={handleSubmit}>
-            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-              <span style={{ fontWeight: 'bold' }}>City/Street</span>
-              <input type="text" value={location} onChange={handleLocationChange} placeholder="Location" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <form className='flex' onSubmit={handleSubmit}>
+            <div className='box'>
+              <span>City/Street</span>
+              <input type='text' placeholder='Location' value={location} onChange={handleLocationChange} />
             </div>
-            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-              <span style={{ fontWeight: 'bold' }}>Listing Type</span>
-              <div onChange={handleListingTypeChange} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label><input type="radio" value="Buy" name="listingType" defaultChecked /> Buy</label>
-                <label><input type="radio" value="Rent" name="listingType" /> Rent</label>
-                <label><input type="radio" value="Lease" name="listingType" /> Lease</label>
-              </div>
-            </div>
-            <div className="box" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-              <span style={{ fontWeight: 'bold' }}>Property Type</span>
-              <div onChange={handletypeChange} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {["house", "villa", "apartment", "office"].map((option, index) => (
-                  <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <input type="radio" value={option} name="type" defaultChecked={option === "House"} />
-                    {option}
-                  </label>
-                ))}
-              </div>
+
+            <div className='box'>
+              <span>Property Type</span>
+              <DropdownList defaultValue="House" data={["", "house", "villa", "apartment", "office"]} value={type} onChange={settype} />
             </div>
             <div className="additional">
-              <button className="btnmore" onClick={(e) => toggleMoreMenu(e)}>
+              <button className='btnmore' onClick={(e) => toggleMoreMenu(e)}>
                 <h4>More</h4>
               </button>
-              <button className="btn1">
-                <i className="fa fa-search"></i>
+              <button className='btn1'>
+                <i className='fa fa-search'></i>
               </button>
             </div>
             {showMoreMenu && (
               <>
-                <div className="box">
+                <div className='box'>
                   <span>Price Range</span>
                   <Box sx={{ width: 500 }}></Box>
-                  <Slider
-                    size="small"
-                    defaultValue={3500000}
-                    aria-label="Small"
-                    valueLabelDisplay="auto"
-                    max={50000000}
-                  />
+                  <Slider size="small" defaultValue={3500000} aria-label="Small" valueLabelDisplay="auto" max={50000000} value={price} onChange={(e, newValue) => setprice(newValue)} />
                 </div>
-                <div className="box">
+                <div className='box'>
                   <span>Bedrooms</span>
-                  <DropdownList
-                    defaultValue="2BHK"
-                    data={["1BHK", "2BHK", "3BHK", "4BHK", "5BHK+"]}
-                  />
+                  <DropdownList defaultValue="1" data={["", "1", "2", "3", "4", "5"]} value={bedrooms} onChange={(newValue) => setbedrooms(newValue)} />
                 </div>
               </>
             )}
