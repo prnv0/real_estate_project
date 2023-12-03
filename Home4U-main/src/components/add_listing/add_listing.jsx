@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 const cookies = require("js-cookie");
 
 
+
 const AddListing = () => {
+    const navigate = useNavigate();
+
     const [form, setForm] = useState({
         name: '',
         location: '',
@@ -27,6 +31,7 @@ const AddListing = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const token = cookies.get('access_token');
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -34,7 +39,7 @@ const AddListing = () => {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
 
-        const uid = JSON.parse(jsonPayload).uid;
+        const uid = await JSON.parse(jsonPayload).uid;
         console.log(uid);
         setForm({
             ...form,
@@ -54,16 +59,17 @@ const AddListing = () => {
             },
             body: JSON.stringify(formWithArray),
             credentials: 'include',
-        });
+        }).then(response => response.json())
+            .then(data => {
 
-        if (!response.ok) {
-            // Handle error
-            console.error('Failed to create listing');
-            return;
-        }
+                console.log('creation successful');
+                console.log(data);
+                navigate('/', { state: { uid: uid } }); // Redirect to main page
 
-        const data = await response.json();
-        console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
 
     return (
