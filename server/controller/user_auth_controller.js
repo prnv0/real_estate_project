@@ -59,7 +59,7 @@ const sign_in = async (req, res, next) => {
                         res.cookie("access_token", token, {
                             sameSite: "none",
                             secure: true,
-                            httpOnly: true
+                            httpOnly: false,
                         }).status(200).json(rest);
                         // res.status(200).send("User logged in successfully");
                     } else {

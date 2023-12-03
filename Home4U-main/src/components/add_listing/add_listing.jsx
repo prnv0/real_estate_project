@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 const cookies = require("js-cookie");
 
+
 const AddListing = () => {
     const [form, setForm] = useState({
         name: '',
@@ -9,7 +10,7 @@ const AddListing = () => {
         type: '',
         price_per_sqft: '',
         user_uid: '',
-        image_urls: [],
+        image_urls: {},
         description: '',
         bedrooms: 0,
         bathrooms: 0,
@@ -27,8 +28,42 @@ const AddListing = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = cookies.get('access_token');
-        console.log(token);
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
 
+        const uid = JSON.parse(jsonPayload).uid;
+        console.log(uid);
+        setForm({
+            ...form,
+            user_uid: uid,
+        });
+        console.log(form);
+
+        const formWithArray = {
+            ...form,
+            image_urls: form.image_urls.split(',').map(url => url.trim()),
+        };
+
+        const response = await fetch('http://localhost:3000/api/listing/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formWithArray),
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            // Handle error
+            console.error('Failed to create listing');
+            return;
+        }
+
+        const data = await response.json();
+        console.log(data);
     };
 
     return (
@@ -47,6 +82,10 @@ const AddListing = () => {
             <input type="number" name="bathrooms" value={form.bathrooms} onChange={handleChange} placeholder="Number of bathrooms" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
             <input type="text" name="image_urls" value={form.image_urls} onChange={handleChange} placeholder="Image URLs (comma-separated)" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
             <input type="number" name="area_sqft" value={form.area_sqft} onChange={handleChange} placeholder="Area (sqft)" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
+            <input type="number" name="year_built" value={form.year_built} onChange={handleChange} placeholder="Year built" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
+            <input type="text" name="description" value={form.description} onChange={handleChange} placeholder="Description" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
+
+
             <button type="submit" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#007BFF', color: 'white', cursor: 'pointer', margin: '10px 0' }}>Add Listing</button>
         </form>
     );
