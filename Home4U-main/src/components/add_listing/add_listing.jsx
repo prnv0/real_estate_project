@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-const jwt = require('jsonwebtoken');
+const cookies = require("js-cookie");
 
 const AddListing = () => {
     const [form, setForm] = useState({
@@ -26,22 +26,9 @@ const AddListing = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = req.cookies.access_token;
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            console.log("hai");
-            if (err) {
-                return next(errorhandler(403, 'Forbidden'));
-            }
-            form.user_uid = decoded;
-        });
-        try {
-            const response = await axios.post('http://localhost:3000/api/listing/create', form, { withCredentials: true });
-            // Handle response
-            console.log(response.data);
-        } catch (error) {
-            // Handle error
-            console.error(error);
-        }
+        const token = cookies.get('access_token');
+        console.log(token);
+
     };
 
     return (
