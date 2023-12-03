@@ -2,13 +2,12 @@ import React from "react"
 // import { list1 } from "../../data/Data"
 
 const RecentCard = ({ list }) => {
-  console.log(list);
 
   return (
     <>
       <div className='content grid3 mtop'>
         {(list || []).map((val, index) => {
-          { console.log(val) }
+
           const { image_urls, area_sqft, location, name, price_per_sqft, type } = val;
           return (
             <div className='box shadow' key={index}>

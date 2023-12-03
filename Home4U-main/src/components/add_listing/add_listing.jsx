@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const cookies = require("js-cookie");
@@ -7,13 +7,28 @@ const cookies = require("js-cookie");
 
 const AddListing = () => {
     const navigate = useNavigate();
+    const [uid, setUid] = useState(null);
+
+    useEffect(() => {
+        const token = cookies.get('access_token');
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const decodedUid = JSON.parse(jsonPayload).uid;
+
+        setUid(decodedUid);
+        console.log("hii" + uid);
+    }, []);
 
     const [form, setForm] = useState({
         name: '',
         location: '',
         type: '',
         price_per_sqft: '',
-        user_uid: '',
+        user_uid: 0,
         image_urls: {},
         description: '',
         bedrooms: 0,
@@ -32,25 +47,29 @@ const AddListing = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const token = cookies.get('access_token');
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+        // const token = cookies.get('access_token');
+        // const base64Url = token.split('.')[1];
+        // const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        // const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        // }).join(''));
+        // console.log("base : " + jsonPayload["uid"]);
 
-        const uid = await JSON.parse(jsonPayload).uid;
-        console.log(uid);
-        setForm({
-            ...form,
-            user_uid: uid,
-        });
-        console.log(form);
+        // const tuid = JSON.parse(jsonPayload).uid;
+        // setuid(tuid);
+        console.log("await" + uid);
 
         const formWithArray = {
             ...form,
+            user_uid: uid,
             image_urls: form.image_urls.split(',').map(url => url.trim()),
         };
+
+        setForm(formWithArray);
+
+        console.log("verruthe " + uid);
+        console.log(form);
+        console.log(formWithArray);
 
         const response = await fetch('http://localhost:3000/api/listing/create', {
             method: 'POST',

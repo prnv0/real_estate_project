@@ -36,8 +36,7 @@ const Hero = ({ uid }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(location);
-    console.log(type);
+
     const response = await axios.get('http://localhost:3000/api/listing/listings/search', {
       params: {
         type,
@@ -63,9 +62,7 @@ const Hero = ({ uid }) => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
       setSearchResults(data);
-      console.log(searchResults);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
