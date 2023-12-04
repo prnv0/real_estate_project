@@ -8,13 +8,13 @@ const About = () => {
   return (
     <>
       <section className='about'>
-        <Back name='About Us' title='About Us - Who We Are?' cover={img} />
+        <Back name='About Us' title='About Us - Who Are We?' cover={img} />
         <div className='container flex mtop'>
           <div className='left row'>
-            <Heading title='Our Agency Story' subtitle='Check out our company story and work process' />
+            <Heading title='HOMES4U' subtitle='Simplifying the home owning process' />
 
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+            <p>Welcome to HOMES4U, your premier destination for finding the perfect property that truly feels like home. Our innovative real estate platform is designed to simplify your property search and connect you with your dream living space effortlessly.</p>
+            <p>Discover the future of real estate with HOMES4U – where your ideal home is just a click away. Our platform goes beyond traditional listings, offering a dynamic and comprehensive view of each property through high-quality images, detailed descriptions, and virtual tours. </p>
             <button className='btn2'>More About Us</button>
           </div>
           <div className='right row'>

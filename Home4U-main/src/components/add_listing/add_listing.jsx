@@ -111,7 +111,7 @@ const AddListing = () => {
             <input type="text" name="description" value={form.description} onChange={handleChange} placeholder="Description" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', margin: '10px 0' }} />
 
 
-            <button type="submit" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#007BFF', color: 'white', cursor: 'pointer', margin: '10px 0' }}>Add Listing</button>
+            <button type="submit" style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#27ae60', color: 'white', cursor: 'pointer', margin: '10px 0' }}>Add Listing</button>
         </form>
     );
 };

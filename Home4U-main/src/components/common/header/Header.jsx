@@ -23,12 +23,9 @@ const Header = () => {
             </ul>
           </div>
           <div className='button flex'>
-            <h4>
-              <span>2</span> My List
-            </h4>
             <Link to="/login">
               <button className='btn1'>
-                <i className='fa fa-sign-out'></i> Sign In
+                <i className='fa fa-sign-out'></i> Sign Out
               </button>
             </Link>
           </div>
